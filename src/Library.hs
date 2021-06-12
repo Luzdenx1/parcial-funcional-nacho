@@ -19,8 +19,11 @@ data Cuenta =
         saldo :: Number 
     }deriving Show
 
-data Transaccion = Intercambio | Mineria
+instance Eq Cuenta where
+    (==) cuenta cuenta' = correspondeId (identificador cuenta) cuenta' && (saldo cuenta == saldo cuenta')
 
+
+data Transaccion = Intercambio | Mineria
 
 --tests
 
@@ -91,16 +94,13 @@ obtenerLaPrimeraSegun condicion = head . filter condicion
  
 --3
 
-esLaMisma::Cuenta -> Cuenta -> Bool
-esLaMisma cue cue' = correspondeId (identificador cue) cue' && (saldo cue == saldo cue')
-
 eliminarLaPrimeraSegun :: (Cuenta -> Bool) -> [Cuenta] -> [Cuenta]
 eliminarLaPrimeraSegun condicion cuentas = 
     
-    filter (not . esLaMisma aux) cuentas
+    filter (not . (==) primeraQueCumple) cuentas
     
-    where   aux = obtenerLaPrimeraSegun condicion cuentas
-
+    where   primeraQueCumple = obtenerLaPrimeraSegun condicion cuentas
+            
 
 --- Punto #3 ---
 
@@ -108,37 +108,23 @@ modificarSegun :: Id -> [Cuenta] -> (Cuenta -> Cuenta) -> [Cuenta]
 modificarSegun id cuentas trasformacion = 
     map trasformacion (filter (correspondeId id) cuentas) ++ filter (not . correspondeId id) cuentas
 
+
+--- Punto #4 ---
+
 --- Punto #5 ---
 
 sonEstables :: [Cuenta] -> Bool
 sonEstables = all ((>=0).saldo) 
 
+--- Punto #6 ---
+
+
 --- Punto #7 ---
 
----------------------------------------------------------------- Tests
-
-lista1=[1..20]
-lista2=[1..50]
-
-tupla :: (Number -> Number -> Number, Number -> Number -> Number)
-tupla=( (+) , (*) )
-
-listaDeListas=[lista1,lista2]
-
-listaPalabras=["hoal","chau"]
-
-
-
-----------------------------------------------------------------------
-
---funcionSinPudor :: [[Number]] -> ( Number -> Number , String -> String ) -> String -> String
-
-funcionSinPudor :: [[Number]] -> (Number -> Number, b -> b) -> b -> b
+funcionSinPudor :: [[Number]] -> (Number -> Number, a -> a) -> a -> a
 funcionSinPudor x y 
     | (length . filter even . map (fst y) $ head x) > 10 =  id 
     | otherwise = snd y
-
--- map::(a->a) -> [a] -> [a]
 
 -- Procedimiento de inferencia --
 {-
@@ -157,6 +143,7 @@ funcionSinPudor x y
     de "y" que es una funcion. 
 
     En base a esto ultimo, podemos ver tambien que la "funcionsSinPudor" se esta aplicando parcialmente a un elemento cuyo tipo no se
-    puede determinar 
-
+    puede determinar ya que en ambos casos de las guardas, se le aplica una funcion que no tiene un tipo preestablecido. En el caso de 
+    la identidad, devuelve el mismo elemento. Y en el otherwise, devuelve la segunda funcion de "y" que tampoco tiene un tipo definido ni
+    ninguna operacion que lo haga. 
 -}
