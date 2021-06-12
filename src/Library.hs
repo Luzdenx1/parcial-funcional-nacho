@@ -25,45 +25,6 @@ instance Eq Cuenta where
 
 data Transaccion = Intercambio | Mineria
 
---tests
-
-cuenta1=
-    Cuenta{
-        identificador="1",
-        saldo = 1200
-    }
-
-
-cuenta2=
-    Cuenta{
-        identificador="2",
-        saldo = 1500
-    }
-
-
-cuenta3=
-    Cuenta{
-        identificador="3",
-        saldo = 180000
-    }
-
-cuenta4=
-    Cuenta{
-        identificador="3",
-        saldo = 180000000
-    }
-
-transaccion1 = minar cuenta1
-
-transaccion2 = cobrar 400 cuenta2 
-
-cuentas :: [Cuenta]
-cuentas=[cuenta1,cuenta2,cuenta3,cuenta4]
-
-bloque1 = [ (identificador cuenta1, minar cuenta1), (identificador cuenta2, cobrar 200 cuenta2), (identificador cuenta3, pagar 400 cuenta3) ]
-
-
-------------------------------------------------------------------------------------------------
 
 -- ii
 
@@ -73,7 +34,8 @@ pagar saldoAPagar cuenta = cuenta { saldo = saldo cuenta - saldoAPagar}
 
 -- b
 cobrar :: Intercambio
-cobrar saldoACobrar cuenta = cuenta { saldo = saldoACobrar + saldo cuenta }
+cobrar saldoACobrar = \cuenta -> cuenta { saldo = saldoACobrar + saldo cuenta }
+
 
 -- c
 minar :: Mineria
@@ -88,7 +50,6 @@ correspondeId identificacion = (== identificacion).identificador
 
 --2
 
--- obtenerLaPrimeraSegun (correspondeId "2") cuentas ------------- Para testear
 obtenerLaPrimeraSegun :: (c -> Bool) -> [c] -> c
 obtenerLaPrimeraSegun condicion = head . filter condicion
  
