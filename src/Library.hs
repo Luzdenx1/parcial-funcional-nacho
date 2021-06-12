@@ -18,7 +18,7 @@ data Cuenta =
 
 data Transaccion= Intercambio | Mineria
 
-data Bloque = Bloque { transacciones :: [Transaccion] }
+--data Bloque = Bloque { transacciones :: [Transaccion] }
 
 --tests
 
@@ -42,7 +42,14 @@ cuenta3=
         saldo = 180000
     }
 
-cuentas=[cuenta1,cuenta2,cuenta3]
+cuenta4=
+    Cuenta{
+        identificador="3",
+        saldo = 180000000
+    }
+
+cuentas=[cuenta1,cuenta2,cuenta3,cuenta4]
+
 
 -- ii
 
@@ -70,4 +77,9 @@ correspondeId identificacion = (== identificacion).identificador
 obtenerLaPrimeraSegun condicion = head . filter condicion
  
 --3
-eliminarLaPrimeraSegun condicion =  head . filter condicion
+eliminarLaPrimeraSegun condicion cuentas = 
+    
+    aux2
+    where   aux = obtenerLaPrimeraSegun condicion cuentas
+            aux2 = filter (esLaMisma aux) cuentas
+            esLaMisma c c' = correspondeId c c' && (saldo cuenta == saldo cuenta')
