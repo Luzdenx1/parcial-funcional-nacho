@@ -9,7 +9,6 @@ doble numero = numero + numero
 type Intercambio = Number -> Cuenta -> Cuenta
 type Mineria = Cuenta -> Cuenta
 
-
 -- i
 data Cuenta =
     Cuenta{
@@ -17,32 +16,9 @@ data Cuenta =
         saldo :: Number 
     }deriving Show
 
-data Transaccion=
-    Intercambio{
-        
-    }
-    | 
-    Mineria{
+data Transaccion= Intercambio | Mineria
 
-    }
-
--- data Transaccion=
---                 Mineria {
---                     --minar :: Cuenta -> Cuenta
---                 }
---                 |
---                 Cobro { 
---                     --cobrar :: Number -> Cuenta -> Cuenta
---                 } 
---                 | 
---                 Pago { 
---                     --pagar :: Number -> Cuenta -> Cuenta
---                     --pagar :: Pago
---                 }
---     deriving (Show, Eq)
-
-
-data Bloque = Bloque { transacciones :: [] } deriving (Show, Eq)
+data Bloque = Bloque { transacciones :: [Transaccion] }
 
 --tests
 
@@ -53,9 +29,45 @@ cuenta1=
     }
 
 
+cuenta2=
+    Cuenta{
+        identificador="2",
+        saldo = 1500
+    }
+
+
+cuenta3=
+    Cuenta{
+        identificador="3",
+        saldo = 180000
+    }
+
+cuentas=[cuenta1,cuenta2,cuenta3]
+
 -- ii
 
 -- a
-pagar :: Pago
-pagar cuenta saldoAPagar = cuenta{ saldo = saldoAPagar + saldo cuenta}  
+pagar :: Intercambio
+pagar saldoAPagar cuenta = cuenta { saldo = saldo cuenta - saldoAPagar}  
 
+-- b
+cobrar :: Intercambio
+cobrar saldoACobrar cuenta = cuenta { saldo = saldoACobrar + saldo cuenta }
+
+-- c
+minar :: Mineria
+minar = cobrar 25
+
+
+--- Punto #2 ---
+
+--1
+correspondeId identificacion = (== identificacion).identificador 
+
+--2
+
+-- obtenerLaPrimeraSegun (correspondeId "2") cuentas ------------- Para testear
+obtenerLaPrimeraSegun condicion = head . filter condicion
+ 
+--3
+eliminarLaPrimeraSegun condicion =  head . filter condicion
