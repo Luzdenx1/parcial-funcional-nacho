@@ -77,9 +77,17 @@ correspondeId identificacion = (== identificacion).identificador
 obtenerLaPrimeraSegun condicion = head . filter condicion
  
 --3
+
+esLaMisma::Cuenta -> Cuenta -> Bool
+esLaMisma cue cue' = correspondeId (identificador cue) cue' && (saldo cue == saldo cue')
+
 eliminarLaPrimeraSegun condicion cuentas = 
     
-    aux2
+    filter (not . esLaMisma aux) cuentas
+    
     where   aux = obtenerLaPrimeraSegun condicion cuentas
-            aux2 = filter (esLaMisma aux) cuentas
-            esLaMisma c c' = correspondeId c c' && (saldo cuenta == saldo cuenta')
+
+
+--- Punto #3 ---
+
+modificarSegun id cuentas trasformacion = 
