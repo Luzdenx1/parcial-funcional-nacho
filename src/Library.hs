@@ -7,8 +7,8 @@ doble numero = numero + numero
 --- Punto #1 ---
 type Id = String
 
--- type Intercambio = Number -> Cuenta -> Cuenta
--- type Mineria = Cuenta -> Cuenta
+type Intercambio = Number -> Cuenta -> Cuenta
+type Mineria = Cuenta -> Cuenta
 
 type Bloque = [(Id,Transaccion)]
 
@@ -19,14 +19,8 @@ data Cuenta =
         saldo :: Number 
     }deriving Show
 
-data Transaccion= --Intercambio | Mineria
-        Intercambio {
-            operacion :: Intercambio
-        } | Mineria {
-            operacion :: Mineria
-        }
+data Transaccion = Intercambio | Mineria
 
---data Bloque = Bloque { pares :: [Par] }
 
 --tests
 
@@ -56,39 +50,43 @@ cuenta4=
         saldo = 180000000
     }
 
-transaccion1::Transaccion
-transaccion1 = Transaccion { minar cuenta1 }
+transaccion1 = minar cuenta1
 
 transaccion2 = cobrar 400 cuenta2 
 
 cuentas :: [Cuenta]
 cuentas=[cuenta1,cuenta2,cuenta3,cuenta4]
 
+bloque1 = [ (identificador cuenta1, minar cuenta1), (identificador cuenta2, cobrar 200 cuenta2), (identificador cuenta3, pagar 400 cuenta3) ]
+
+
 ------------------------------------------------------------------------------------------------
 
 -- ii
 
 -- a
---pagar :: Intercambio
+pagar :: Intercambio
 pagar saldoAPagar cuenta = cuenta { saldo = saldo cuenta - saldoAPagar}  
 
 -- b
---cobrar :: Intercambio
+cobrar :: Intercambio
 cobrar saldoACobrar cuenta = cuenta { saldo = saldoACobrar + saldo cuenta }
 
 -- c
---minar :: Mineria
+minar :: Mineria
 minar = cobrar 25
 
 
 --- Punto #2 ---
 
 --1
+correspondeId :: Id -> Cuenta -> Bool
 correspondeId identificacion = (== identificacion).identificador 
 
 --2
 
 -- obtenerLaPrimeraSegun (correspondeId "2") cuentas ------------- Para testear
+obtenerLaPrimeraSegun :: (c -> Bool) -> [c] -> c
 obtenerLaPrimeraSegun condicion = head . filter condicion
  
 --3
@@ -96,6 +94,7 @@ obtenerLaPrimeraSegun condicion = head . filter condicion
 esLaMisma::Cuenta -> Cuenta -> Bool
 esLaMisma cue cue' = correspondeId (identificador cue) cue' && (saldo cue == saldo cue')
 
+eliminarLaPrimeraSegun :: (Cuenta -> Bool) -> [Cuenta] -> [Cuenta]
 eliminarLaPrimeraSegun condicion cuentas = 
     
     filter (not . esLaMisma aux) cuentas
@@ -105,8 +104,13 @@ eliminarLaPrimeraSegun condicion cuentas =
 
 --- Punto #3 ---
 
+modificarSegun :: Id -> [Cuenta] -> (Cuenta -> Cuenta) -> [Cuenta]
 modificarSegun id cuentas trasformacion = 
     map trasformacion (filter (correspondeId id) cuentas) ++ filter (not . correspondeId id) cuentas
 
+--- Punto #4 ---
 
+comoModifica bloque cuentas = map bloque cuentas
+
+--- Punto #7 ---
 
