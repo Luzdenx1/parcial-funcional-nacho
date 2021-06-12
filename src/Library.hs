@@ -5,20 +5,28 @@ doble :: Number -> Number
 doble numero = numero + numero
 
 --- Punto #1 ---
+type Id = String
 
-type Intercambio = Number -> Cuenta -> Cuenta
-type Mineria = Cuenta -> Cuenta
+-- type Intercambio = Number -> Cuenta -> Cuenta
+-- type Mineria = Cuenta -> Cuenta
+
+type Bloque = [(Id,Transaccion)]
 
 -- i
 data Cuenta =
     Cuenta{
-        identificador :: String,
+        identificador :: Id,
         saldo :: Number 
     }deriving Show
 
-data Transaccion= Intercambio | Mineria
+data Transaccion= --Intercambio | Mineria
+        Intercambio {
+            operacion :: Intercambio
+        } | Mineria {
+            operacion :: Mineria
+        }
 
---data Bloque = Bloque { transacciones :: [Transaccion] }
+--data Bloque = Bloque { pares :: [Par] }
 
 --tests
 
@@ -48,21 +56,28 @@ cuenta4=
         saldo = 180000000
     }
 
+transaccion1::Transaccion
+transaccion1 = Transaccion { minar cuenta1 }
+
+transaccion2 = cobrar 400 cuenta2 
+
+cuentas :: [Cuenta]
 cuentas=[cuenta1,cuenta2,cuenta3,cuenta4]
 
+------------------------------------------------------------------------------------------------
 
 -- ii
 
 -- a
-pagar :: Intercambio
+--pagar :: Intercambio
 pagar saldoAPagar cuenta = cuenta { saldo = saldo cuenta - saldoAPagar}  
 
 -- b
-cobrar :: Intercambio
+--cobrar :: Intercambio
 cobrar saldoACobrar cuenta = cuenta { saldo = saldoACobrar + saldo cuenta }
 
 -- c
-minar :: Mineria
+--minar :: Mineria
 minar = cobrar 25
 
 
@@ -91,3 +106,7 @@ eliminarLaPrimeraSegun condicion cuentas =
 --- Punto #3 ---
 
 modificarSegun id cuentas trasformacion = 
+    map trasformacion (filter (correspondeId id) cuentas) ++ filter (not . correspondeId id) cuentas
+
+
+
