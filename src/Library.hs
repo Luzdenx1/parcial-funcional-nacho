@@ -6,6 +6,10 @@ doble numero = numero + numero
 
 --- Punto #1 ---
 
+type Intercambio = Number -> Cuenta -> Cuenta
+type Mineria = Cuenta -> Cuenta
+
+
 -- i
 data Cuenta =
     Cuenta{
@@ -14,21 +18,31 @@ data Cuenta =
     }deriving Show
 
 data Transaccion=
-                Mineria {
-                    minar :: Cuenta -> Cuenta
-                }
-                |
-                Cobro { 
-                    cobrar :: Number -> Cuenta -> Cuenta
-                } 
-                | 
-                Pago { 
-                    pagar :: Number -> Cuenta -> Cuenta
-                }
-    deriving (Show, Eq)
+    Intercambio{
+        
+    }
+    | 
+    Mineria{
+
+    }
+
+-- data Transaccion=
+--                 Mineria {
+--                     --minar :: Cuenta -> Cuenta
+--                 }
+--                 |
+--                 Cobro { 
+--                     --cobrar :: Number -> Cuenta -> Cuenta
+--                 } 
+--                 | 
+--                 Pago { 
+--                     --pagar :: Number -> Cuenta -> Cuenta
+--                     --pagar :: Pago
+--                 }
+--     deriving (Show, Eq)
 
 
-data Bloque = Bloque { transacciones :: [Transaccion] } deriving (Show, Eq)
+data Bloque = Bloque { transacciones :: [] } deriving (Show, Eq)
 
 --tests
 
@@ -42,6 +56,6 @@ cuenta1=
 -- ii
 
 -- a
---      pago :: Number -> Cuenta -> Cuenta
-paga cuenta saldoAPagar = cuenta{ saldo = saldoAPagar + saldo cuenta}  
+pagar :: Pago
+pagar cuenta saldoAPagar = cuenta{ saldo = saldoAPagar + saldo cuenta}  
 
