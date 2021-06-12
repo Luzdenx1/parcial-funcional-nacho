@@ -110,7 +110,31 @@ modificarSegun id cuentas trasformacion =
 
 --- Punto #4 ---
 
-comoModifica bloque cuentas = map bloque cuentas
 
 --- Punto #7 ---
 
+lista1=[1..20]
+lista2=[1..50]
+
+tupla :: (Number -> Number -> Number, Number -> Number -> Number)
+tupla=( (+) , (*) )
+
+listaDeListas=[lista1,lista2]
+
+funcionSinPudor :: [[Number]] -> ( Number -> Number , Number -> Number ) -> Number -> Number
+funcionSinPudor x y 
+    | (length . filter even . map (fst y) $ head x) > 10 =  id 
+    | otherwise = snd y
+
+-- Procedimiento de inferencia --
+{-
+    Primero se acomodo la funcion para tener un mejor "panorama". Al observar lo que retorna la funcion podemos notar que x 
+    es una lista ya que se le esta aplicando la funcion head, mientras que y es una tupla ya que se le aplica la funcion fst.
+    Dicho esto, se puede identificar a y como una tupla de funciones ya que luego de que se extrae el primer elemento de la 
+    tupla, se utiliza como "transformacion" en un map.
+    Luego se hace uso de un filter con la condicion de que los elementos sean pares, por lo que se puede deducir que x es una
+    lista de lista de numeros. Ademas, se puede observar que ese filtro se aplica solo a la primer lista de numeros de x, obviamente
+    luego de hacerle la transformacion, para luego medir la longitud de la misma. En el caso que la longitud de esa lista sea menor a 10
+    entonces se devuelve la identidad (que seria la misma funcion "funcionSinPudor" )
+
+-}
